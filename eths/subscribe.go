@@ -140,9 +140,7 @@ func EventSubscribe(connstr, contractAddr string) error {
 	//合约地址转换
 	contractAddress := common.HexToAddress(contractAddr)
 	//填写过滤条件
-
 	newAssetHash1 := crypto.Keccak256Hash([]byte("NewAsset(bytes32,address,uint256)"))
-
 	query := ethereum.FilterQuery{
 		Addresses: []common.Address{contractAddress},
 		Topics:    [][]common.Hash{{newAssetHash1}},

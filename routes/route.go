@@ -52,7 +52,7 @@ func CreateAccount(c echo.Context) error {
 		return err
 	}
 
-	//session处理，注册即登陆
+	//session处理
 	sess, _ := session.Get("session", c)
 	sess.Options = &sessions.Options{
 		Path:     "/",
@@ -153,7 +153,7 @@ func UploadPic(c echo.Context) error {
 	}
 	defer src.Close()
 
-	//content.Content = make([]byte, h.Size)
+	//打开要保存的位置
 	content.Content = "static/photo/" + h.Filename
 	dst, err := os.Create(content.Content)
 	if err != nil {
@@ -163,11 +163,6 @@ func UploadPic(c echo.Context) error {
 	}
 	defer dst.Close()
 
-	//	// Copy
-	//	if _, err = io.Copy(dst, src); err != nil {
-	//		fmt.Println("io.copy err", err)
-	//		return err
-	//	}
 	cHash := make([]byte, h.Size)
 	//src.Seek(0, os.SEEK_SET) //移动到文件头的位置
 	n, err := src.Read(cHash)

@@ -46,7 +46,7 @@ func main() {
 	EchoObj.POST("/login", routes.Login)              //登陆
 	EchoObj.POST("/content", routes.UploadPic)        //上传图片
 	EchoObj.GET("/content", routes.GetAccountContent) //查看用户图片
-	EchoObj.GET("/content/:title", routes.GetContent) //查看制定图片
+	EchoObj.GET("/content/:title", routes.GetContent) //查看具体图片
 	EchoObj.POST("/auction", routes.ContentAuction)   //发起拍卖
 	EchoObj.GET("/auctions", routes.GetAuctions)      //查看当前拍卖图片
 	EchoObj.GET("/auction/bid", routes.BidAuction)    //拍卖处理
