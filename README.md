@@ -2,10 +2,13 @@
 
 ### 目录介绍
 
--  static html页面目录
+-  static  html页面目录
 -  configs 配置文件读取处理
 -  routes  路由处理
--  etc  配置文件处理
+-  etc   配置文件处理
+-  utils 通用处理，错误信息
+-  dbs   数据库处理文件
+-  eths  以太坊相关处理
 
 ## 环境安装需要
 
@@ -17,8 +20,34 @@ go get -u github.com/BurntSushi/toml
 
 ### echo框架安装
 
+先安装crypto,labstack使用了该库，需要借助github，go get不能用
+```
+cd $GOPATH/src
+mkdir -p golang.org/x/
+cd golang.org/x/
+git clone https://github.com/golang/crypto.git
+```
+安装echo
 ```
 go get -u github.com/labstack/echo
+go get -u github.com/labstack/echo-contrib/session
+```
+
+
+
+### 开发过程可能需要用到的库安装方法如下
+
+
+mysql的go语言驱动安装
+```
+go get -u github.com/go-sql-driver/mysql
+```
+
+其他可能涉及的库
+```
+go get -u github.com/labstack/gommon/
+go get -u github.com/dgrijalva/jwt-go
+go get -u github.com/go-sql-driver/mysql
 ```
 
 ### echo框架学习资料
@@ -27,87 +56,4 @@ go get -u github.com/labstack/echo
 
 ### 数据库建库脚本
 
-```
-create database copyright character set utf8;
-use copyright
-
-drop table if exists vote;
-drop table if exists account_content;
-drop table if exists aution;
-drop table if exists account;
-drop table if exists content;
-create table account
-(
-   account_id           int not null primary key auto_increment,
-   email                 varchar(50),
-   username             varchar(30),
-   identity_id          varchar(100),
-   address              varchar(256)
-);
-CREATE UNIQUE INDEX account_email_uindex ON copyright2.account (email);
-CREATE UNIQUE INDEX account_name_uindex ON copyright2.account (username);
-alter table account comment '账户表';
-
-
-create table content
-(
-   content_id           int not null primary key auto_increment,
-   title                varchar(100),
-   content              blob,
-   content_hash         varchar(256),
-   ts                   timestamp
-);
-
-create table account_content
-(
-   account_id           int,
-   content_id           int,
-   content_hash         varchar(256),
-   percent              int,
-   price                int,
-   sell_price           int,
-   sell_percent         int,
-   ts                   timestamp,
-   status               varchar(2),
-   tokenid              int
-);
-
-alter table account_content add constraint FK_Reference_2 foreign key (account_id)
-      references account (account_id) on delete restrict on update restrict;
-
-alter table account_content add constraint FK_Reference_3 foreign key (content_id)
-      references content (content_id) on delete restrict on update restrict;
-
-create table aution
-(
-   content_hash         varchar(256),
-   account_id           int,
-   percent              int,
-   price                int,
-   ts                   timestamp,
-   end_ts               timestamp default now()
-);
-
-alter table aution add constraint FK_Reference_4 foreign key (account_id)
-      references account (account_id) on delete restrict on update restrict;
-
-create table vote
-(
-   account_id           int,
-   vote_id              int primary key auto_increment,
-   content_hash         varchar(256),
-   vote_time            timestamp,
-   comment              varchar(100)
-);
-
-alter table vote comment '投票表，一个账户一个图片，只能投一票，一票代表50pxc';
-
-alter table vote add constraint FK_Reference_5 foreign key (account_id)
-      references account (account_id) on delete restrict on update restrict;
-
-delete from vote;
-delete from aution;
-delete from account_content;
-delete from content;
-delete from account;
-``` 
+[建库语句](etc/copyright.sql)

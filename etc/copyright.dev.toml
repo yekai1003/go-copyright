@@ -1,7 +1,11 @@
 [common]
 port = ":8086"
-
 [db]
-driver = "mysql"
-url = "root:pdj123@tcp(60.205.231.0:3306)/copyright?charset=utf8"
-
+driver  = "mysql"
+connstr = "root:root@tcp(127.0.0.1:3306)/copyright?charset=utf8"
+[eth]
+connstr = "http://localhost:8545"
+pxcaddr = "0xfeb3E714933c9f343990699D919608eA388bc0EB"
+pxaaddr = "0x68a75a53d420b64484e5f1aa79125f38da26c3da"
+keydir  = "/Users/yk/ethdev/ethdata/dev/data/keystore"
+foundation = "0x3bf47cd6d8587374b891545fa1f08e196bd6c135"

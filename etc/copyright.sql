@@ -1,3 +1,4 @@
+drop database if exists copyright;
 create database copyright character set utf8;
 use copyright
 
@@ -14,8 +15,8 @@ create table account
    identity_id          varchar(100),
    address              varchar(256)
 );
-CREATE UNIQUE INDEX account_email_uindex ON copyright2.account (email);
-CREATE UNIQUE INDEX account_name_uindex ON copyright2.account (username);
+CREATE UNIQUE INDEX account_email_uindex ON copyright.account (email);
+CREATE UNIQUE INDEX account_name_uindex ON copyright.account (username);
 alter table account comment '账户表';
 
 
@@ -23,57 +24,43 @@ create table content
 (
    content_id           int not null primary key auto_increment,
    title                varchar(100),
-   content              blob,
-   content_hash         varchar(256),
+   content              varchar(256),
+   content_hash         varchar(100),
    ts                   timestamp
 );
 
 create table account_content
 (
-   account_id           int,
-   content_id           int,
-   content_hash         varchar(256),
-   percent              int,
-   price                int,
-   sell_price           int,
-   sell_percent         int,
-   ts                   timestamp,
-   status               varchar(2),
-   tokenid              int
+   content_hash         varchar(100),
+   token_id             int,
+   address              varchar(100),
+   ts                   timestamp
 );
 
-alter table account_content add constraint FK_Reference_2 foreign key (account_id)
-      references account (account_id) on delete restrict on update restrict;
 
-alter table account_content add constraint FK_Reference_3 foreign key (content_id)
-      references content (content_id) on delete restrict on update restrict;
-
-create table aution
+create table auction
 (
    content_hash         varchar(256),
-   account_id           int,
+   address              varchar(100),
+   token_id             int,
    percent              int,
    price                int,
-   ts                   timestamp,
-   end_ts               timestamp default now()
+   status               int,
+   ts                   timestamp
 );
 
-alter table aution add constraint FK_Reference_4 foreign key (account_id)
-      references account (account_id) on delete restrict on update restrict;
 
 create table vote
 (
-   account_id           int,
    vote_id              int primary key auto_increment,
+   address              varchar(100),   
    content_hash         varchar(256),
    vote_time            timestamp,
    comment              varchar(100)
 );
 
 alter table vote comment '投票表，一个账户一个图片，只能投一票，一票代表50pxc';
-
-alter table vote add constraint FK_Reference_5 foreign key (account_id)
-      references account (account_id) on delete restrict on update restrict;
+CREATE UNIQUE INDEX vote_uindex ON copyright.vote (address,content_hash);
 
 delete from vote;
 delete from aution;
